@@ -15,17 +15,20 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'Email or phone number is required' });
     }
 
+    const cleanEmail = email ? email.trim() : null;
+    const cleanPhone = phone ? phone.trim() : null;
+
     // Check if user exists by email
-    if (email) {
-      const existingEmail = await prisma.user.findUnique({ where: { email } });
+    if (cleanEmail) {
+      const existingEmail = await prisma.user.findUnique({ where: { email: cleanEmail } });
       if (existingEmail) {
         return res.status(400).json({ message: 'User with this email already exists' });
       }
     }
 
     // Check if user exists by phone
-    if (phone) {
-      const existingPhone = await prisma.user.findUnique({ where: { phone } });
+    if (cleanPhone) {
+      const existingPhone = await prisma.user.findUnique({ where: { phone: cleanPhone } });
       if (existingPhone) {
         return res.status(400).json({ message: 'User with this phone number already exists' });
       }
@@ -36,8 +39,8 @@ router.post('/register', async (req, res) => {
 
     const user = await prisma.user.create({
       data: {
-        email: email || undefined,
-        phone: phone || undefined,
+        email: cleanEmail || undefined,
+        phone: cleanPhone || undefined,
         password: hashedPassword,
         nickname,
       },
@@ -67,26 +70,34 @@ router.post('/register', async (req, res) => {
 // Login
 router.post('/login', async (req, res) => {
   try {
-    const { account, password } = req.body; // 'account' can be email or phone
+    const { account, password } = req.body;
+    console.log('Login attempt:', { account }); // Log login attempt
 
+    if (!account || !password) {
+      return res.status(400).json({ message: 'Account and password are required' });
+    }
+
+    const cleanAccount = account.trim();
     let user;
     
     // Check if account is email or phone
-    const isEmail = account.includes('@');
+    const isEmail = cleanAccount.includes('@');
     
     if (isEmail) {
-      user = await prisma.user.findUnique({ where: { email: account } });
+      user = await prisma.user.findUnique({ where: { email: cleanAccount } });
     } else {
-      user = await prisma.user.findUnique({ where: { phone: account } });
+      user = await prisma.user.findUnique({ where: { phone: cleanAccount } });
     }
 
     if (!user) {
+      console.log('User not found for account:', cleanAccount);
       return res.status(400).json({ message: 'Invalid Credentials' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
+      console.log('Password mismatch for user:', user.id);
       return res.status(400).json({ message: 'Invalid Credentials' });
     }
 

@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int       @id @default(autoincrement())
+  email          String    @unique
+  password       String
+  nickname       String?
+  avatar         String?
+  gender         String?   // "male" | "female"
+  age            Int?
+  height         Float?    // cm
+  initialWeight  Float?    // kg
+  targetWeight   Float?    // kg
+  targetDate     DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  weightRecords   WeightRecord[]
+  dietRecords     DietRecord[]
+  exerciseRecords ExerciseRecord[]
+}
+
+model WeightRecord {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  date      DateTime // Date only, stored as DateTime
+  weight    Float
+  bodyFat   Float?
+  waist     Float?
+  hip       Float?
+  note      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DietRecord {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  date      DateTime
+  type      String   // "breakfast", "lunch", "dinner", "snack"
+  foodName  String
+  amount    Float?   // grams
+  calories  Float    // kcal
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ExerciseRecord {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  date      DateTime
+  type      String   // "running", "swimming", etc.
+  duration  Int?     // minutes
+  calories  Float    // kcal
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

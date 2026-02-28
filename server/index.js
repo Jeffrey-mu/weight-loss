@@ -10,16 +10,15 @@ const prisma = new PrismaClient();
 const PORT = process.env.PORT || 3001;
 
 const corsOptions = {
-  origin: '*', // Allow all origins explicitly for now to fix CORS issues
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  credentials: true, // Some clients might need this even with '*' origin (though standard spec says no, some implementations differ)
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  credentials: true,
+  optionsSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
 
-// Explicitly handle preflight requests for all routes
 app.options(/.*/, cors(corsOptions));
 app.use(express.json());
 

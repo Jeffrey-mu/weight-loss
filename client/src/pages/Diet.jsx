@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import request from '../utils/request';
 import { format } from 'date-fns';
 import { Utensils, Plus, Calendar, Trash2, Clock, Flame } from 'lucide-react';
@@ -11,18 +11,18 @@ const Diet = () => {
   const [amount, setAmount] = useState('');
   const [calories, setCalories] = useState('');
 
-  useEffect(() => {
-    fetchDietRecords();
-  }, [date]);
-
-  const fetchDietRecords = async () => {
+  const fetchDietRecords = useCallback(async () => {
     try {
       const res = await request.get(`/diet?date=${date}`);
       setDietRecords(res.data);
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [date]);
+
+  useEffect(() => {
+    fetchDietRecords();
+  }, [fetchDietRecords]);
 
   const typeMap = {
     breakfast: '早餐',

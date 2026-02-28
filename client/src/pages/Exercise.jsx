@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import request from '../utils/request';
 import { format } from 'date-fns';
 import { Activity, Flame, Clock, Trash2, Calendar, PlusCircle, Dumbbell } from 'lucide-react';
@@ -10,18 +10,18 @@ const Exercise = () => {
   const [duration, setDuration] = useState('');
   const [calories, setCalories] = useState('');
 
-  useEffect(() => {
-    fetchExerciseRecords();
-  }, [date]);
-
-  const fetchExerciseRecords = async () => {
+  const fetchExerciseRecords = useCallback(async () => {
     try {
       const res = await request.get(`/exercise?date=${date}`);
       setExerciseRecords(res.data);
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [date]);
+
+  useEffect(() => {
+    fetchExerciseRecords();
+  }, [fetchExerciseRecords]);
 
   const exerciseTypeMap = {
     running: '跑步',

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /diet
+Disallow: /exercise
+
+Sitemap: https://your-domain.com/sitemap.xml

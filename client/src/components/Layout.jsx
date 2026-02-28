@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { LayoutDashboard, Utensils, Dumbbell, LogOut, User } from 'lucide-react';
+import { LayoutDashboard, Utensils, Dumbbell, LogOut, Shield, User } from 'lucide-react';
 
 const Layout = () => {
   const { user, logout } = useContext(AuthContext);
@@ -45,12 +45,21 @@ const Layout = () => {
                   <Dumbbell className="w-4 h-4 mr-2" />
                   运动记录
                 </Link>
+                {user?.isAdmin ? (
+                  <Link
+                    to="/admin"
+                    className={`inline-flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${isActive('/admin')}`}
+                  >
+                    <Shield className="w-4 h-4 mr-2" />
+                    后台管理
+                  </Link>
+                ) : null}
               </div>
             </div>
             <div className="flex items-center space-x-4">
               <div className="flex items-center text-sm text-gray-700 bg-gray-100 px-3 py-1.5 rounded-full">
                 <User className="w-4 h-4 mr-2 text-gray-500" />
-                <span className="font-medium">{user?.nickname || user?.email}</span>
+                <span className="font-medium">{user?.nickname || user?.email || user?.phone}</span>
               </div>
               <button
                 onClick={logout}
@@ -84,6 +93,12 @@ const Layout = () => {
             <Dumbbell size={24} strokeWidth={location.pathname === '/exercise' ? 2.5 : 2} />
             <span className="text-xs font-medium">运动</span>
           </Link>
+          {user?.isAdmin ? (
+            <Link to="/admin" className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${mobileIsActive('/admin')}`}>
+              <Shield size={24} strokeWidth={location.pathname === '/admin' ? 2.5 : 2} />
+              <span className="text-xs font-medium">后台</span>
+            </Link>
+          ) : null}
           <button 
             onClick={logout} 
             className="flex flex-col items-center justify-center w-full h-full space-y-1 text-gray-400 hover:text-red-500"

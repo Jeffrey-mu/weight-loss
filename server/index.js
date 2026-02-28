@@ -28,12 +28,14 @@ const weightRoutes = require('./routes/weight');
 const dietRoutes = require('./routes/diet');
 const exerciseRoutes = require('./routes/exercise');
 const statsRoutes = require('./routes/stats');
+const adminRoutes = require('./routes/admin');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/weight', weightRoutes);
 app.use('/api/diet', dietRoutes);
 app.use('/api/exercise', exerciseRoutes);
 app.use('/api/stats', statsRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.get('/', (req, res) => {
   res.send('Weight Loss API is running');

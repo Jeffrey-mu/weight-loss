@@ -49,7 +49,7 @@ function prepareSeoFiles() {
   }
 
   const siteUrl = normalizeSiteUrl(process.env.SITE_URL || process.env.VITE_SITE_URL);
-  const robotsLines = ['User-agent: *', 'Allow: /', 'Disallow: /api/', 'Disallow: /diet', 'Disallow: /exercise'];
+  const robotsLines = ['User-agent: *', 'Allow: /', 'Disallow: /api/', 'Disallow: /diet', 'Disallow: /exercise', 'Disallow: /admin'];
   if (siteUrl) robotsLines.push(`Sitemap: ${siteUrl}/sitemap.xml`);
   writeTextFile(path.join(distPath, 'robots.txt'), `${robotsLines.join('\n')}\n`);
 

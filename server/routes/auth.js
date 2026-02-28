@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const prisma = require('../db');
 const auth = require('../middleware/auth');
+const { isAdminUser } = require('../utils/permission');
 
 // Register
 router.post('/register', async (req, res) => {
@@ -130,6 +131,7 @@ router.get('/me', auth, async (req, res) => {
       select: {
         id: true,
         email: true,
+        phone: true,
         nickname: true,
         gender: true,
         age: true,
@@ -138,9 +140,10 @@ router.get('/me', auth, async (req, res) => {
         targetWeight: true,
         targetDate: true,
         avatar: true,
+        role: true,
       },
     });
-    res.json(user);
+    res.json({ ...user, isAdmin: isAdminUser(user) });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');

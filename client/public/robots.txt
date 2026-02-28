@@ -3,5 +3,6 @@ Allow: /
 Disallow: /api/
 Disallow: /diet
 Disallow: /exercise
+Disallow: /admin
 
 Sitemap: https://your-domain.com/sitemap.xml

@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Diet from './pages/Diet';
 import Exercise from './pages/Exercise';
+import Admin from './pages/Admin';
 import Layout from './components/Layout';
 
 const upsertMetaTag = ({ name, property, content }) => {
@@ -65,6 +66,11 @@ const SeoManager = () => {
         description: '创建账号，开始你的减脂记录之旅。',
         robots: 'index,follow',
       },
+      '/admin': {
+        title: '后台管理 - 减肥记录',
+        description: '后台管理入口。',
+        robots: 'noindex,nofollow',
+      },
     };
 
     const meta = routeMeta[path] || defaults;
@@ -92,6 +98,16 @@ const PrivateRoute = ({ children }) => {
   return user ? children : <Navigate to="/login" />;
 };
 
+const AdminRoute = ({ children }) => {
+  const { user, loading } = useContext(AuthContext);
+
+  if (loading) {
+    return <div>加载中...</div>;
+  }
+
+  return user?.isAdmin ? children : <Navigate to="/" />;
+};
+
 function App() {
   return (
     <AuthProvider>
@@ -112,6 +128,14 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path="diet" element={<Diet />} />
             <Route path="exercise" element={<Exercise />} />
+            <Route
+              path="admin"
+              element={
+                <AdminRoute>
+                  <Admin />
+                </AdminRoute>
+              }
+            />
           </Route>
         </Routes>
       </Router>

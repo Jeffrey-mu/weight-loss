@@ -1,10 +1,10 @@
 import { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
-import { LogIn, Mail, Lock } from 'lucide-react';
+import { LogIn, User, Lock } from 'lucide-react';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [account, setAccount] = useState('');
   const [password, setPassword] = useState('');
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -12,11 +12,11 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await login(email, password);
+      await login(account, password);
       navigate('/');
     } catch (err) {
       console.error(err);
-      alert('登录失败');
+      alert('登录失败，请检查账号和密码');
     }
   };
 
@@ -33,15 +33,15 @@ const Login = () => {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-gray-700 text-sm font-medium mb-1.5">邮箱</label>
+            <label className="block text-gray-700 text-sm font-medium mb-1.5">账号</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
               <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                type="text"
+                value={account}
+                onChange={(e) => setAccount(e.target.value)}
                 className="w-full pl-10 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
-                placeholder="name@example.com"
+                placeholder="请输入邮箱或手机号"
                 required
               />
             </div>

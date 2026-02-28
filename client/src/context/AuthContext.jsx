@@ -23,15 +23,15 @@ export const AuthProvider = ({ children }) => {
     checkLoggedIn();
   }, []);
 
-  const login = async (email, password) => {
-    const res = await request.post('/auth/login', { email, password });
+  const login = async (account, password) => {
+    const res = await request.post('/auth/login', { account, password });
     localStorage.setItem('token', res.data.token);
     const userRes = await request.get('/auth/me');
     setUser(userRes.data);
   };
 
-  const register = async (email, password, nickname) => {
-    const res = await request.post('/auth/register', { email, password, nickname });
+  const register = async (email, phone, password, nickname) => {
+    const res = await request.post('/auth/register', { email, phone, password, nickname });
     localStorage.setItem('token', res.data.token);
     const userRes = await request.get('/auth/me');
     setUser(userRes.data);

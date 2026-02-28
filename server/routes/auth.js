@@ -8,22 +8,36 @@ const auth = require('../middleware/auth');
 // Register
 router.post('/register', async (req, res) => {
   try {
-    const { email, password, nickname } = req.body;
+    const { email, phone, password, nickname } = req.body;
 
-    let user = await prisma.user.findUnique({
-      where: { email },
-    });
+    // Validate inputs
+    if (!email && !phone) {
+      return res.status(400).json({ message: 'Email or phone number is required' });
+    }
 
-    if (user) {
-      return res.status(400).json({ message: 'User already exists' });
+    // Check if user exists by email
+    if (email) {
+      const existingEmail = await prisma.user.findUnique({ where: { email } });
+      if (existingEmail) {
+        return res.status(400).json({ message: 'User with this email already exists' });
+      }
+    }
+
+    // Check if user exists by phone
+    if (phone) {
+      const existingPhone = await prisma.user.findUnique({ where: { phone } });
+      if (existingPhone) {
+        return res.status(400).json({ message: 'User with this phone number already exists' });
+      }
     }
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    user = await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
-        email,
+        email: email || undefined,
+        phone: phone || undefined,
         password: hashedPassword,
         nickname,
       },
@@ -53,11 +67,18 @@ router.post('/register', async (req, res) => {
 // Login
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { account, password } = req.body; // 'account' can be email or phone
 
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
+    let user;
+    
+    // Check if account is email or phone
+    const isEmail = account.includes('@');
+    
+    if (isEmail) {
+      user = await prisma.user.findUnique({ where: { email: account } });
+    } else {
+      user = await prisma.user.findUnique({ where: { phone: account } });
+    }
 
     if (!user) {
       return res.status(400).json({ message: 'Invalid Credentials' });

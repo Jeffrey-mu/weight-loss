@@ -26,22 +26,22 @@ const Layout = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
-              <Link to="/" className="flex items-center gap-2 text-xl font-bold text-blue-600 mr-10">
+              <Link to="/dashboard" className="flex items-center gap-2 text-xl font-bold text-blue-600 mr-10">
                 <div className="bg-blue-600 text-white p-1.5 rounded-lg">
                   <LayoutDashboard size={20} />
                 </div>
                 减脂追踪
               </Link>
               <div className="flex space-x-4">
-                <Link to="/" className={`inline-flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${isActive('/')}`}>
+                <Link to="/dashboard" className={`inline-flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${isActive('/dashboard')}`}>
                   <LayoutDashboard className="w-4 h-4 mr-2" />
                   仪表盘
                 </Link>
-                <Link to="/diet" className={`inline-flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${isActive('/diet')}`}>
+                <Link to="/dashboard/diet" className={`inline-flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${isActive('/dashboard/diet')}`}>
                   <Utensils className="w-4 h-4 mr-2" />
                   饮食记录
                 </Link>
-                <Link to="/exercise" className={`inline-flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${isActive('/exercise')}`}>
+                <Link to="/dashboard/exercise" className={`inline-flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${isActive('/dashboard/exercise')}`}>
                   <Dumbbell className="w-4 h-4 mr-2" />
                   运动记录
                 </Link>
@@ -81,16 +81,16 @@ const Layout = () => {
       {/* Mobile Bottom Navigation */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 pb-safe z-50 shadow-[0_-1px_3px_rgba(0,0,0,0.05)]">
         <div className="flex justify-around items-center h-16">
-          <Link to="/" className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${mobileIsActive('/')}`}>
-            <LayoutDashboard size={24} strokeWidth={location.pathname === '/' ? 2.5 : 2} />
+          <Link to="/dashboard" className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${mobileIsActive('/dashboard')}`}>
+            <LayoutDashboard size={24} strokeWidth={location.pathname === '/dashboard' ? 2.5 : 2} />
             <span className="text-xs font-medium">仪表盘</span>
           </Link>
-          <Link to="/diet" className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${mobileIsActive('/diet')}`}>
-            <Utensils size={24} strokeWidth={location.pathname === '/diet' ? 2.5 : 2} />
+          <Link to="/dashboard/diet" className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${mobileIsActive('/dashboard/diet')}`}>
+            <Utensils size={24} strokeWidth={location.pathname === '/dashboard/diet' ? 2.5 : 2} />
             <span className="text-xs font-medium">饮食</span>
           </Link>
-          <Link to="/exercise" className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${mobileIsActive('/exercise')}`}>
-            <Dumbbell size={24} strokeWidth={location.pathname === '/exercise' ? 2.5 : 2} />
+          <Link to="/dashboard/exercise" className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${mobileIsActive('/dashboard/exercise')}`}>
+            <Dumbbell size={24} strokeWidth={location.pathname === '/dashboard/exercise' ? 2.5 : 2} />
             <span className="text-xs font-medium">运动</span>
           </Link>
           {user?.isAdmin ? (
@@ -99,13 +99,6 @@ const Layout = () => {
               <span className="text-xs font-medium">后台</span>
             </Link>
           ) : null}
-          <button 
-            onClick={logout} 
-            className="flex flex-col items-center justify-center w-full h-full space-y-1 text-gray-400 hover:text-red-500"
-          >
-            <LogOut size={24} />
-            <span className="text-xs font-medium">退出</span>
-          </button>
         </div>
       </div>
     </div>

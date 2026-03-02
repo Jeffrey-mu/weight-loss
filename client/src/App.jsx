@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard';
 import Diet from './pages/Diet';
 import Exercise from './pages/Exercise';
@@ -88,6 +89,16 @@ const SeoManager = () => {
   return null;
 };
 
+const PublicRoute = () => {
+  const { user, loading } = useContext(AuthContext);
+
+  if (loading) {
+    return <div>加载中...</div>;
+  }
+
+  return user ? <Navigate to="/dashboard" /> : <Landing />;
+};
+
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
 
@@ -95,7 +106,7 @@ const PrivateRoute = ({ children }) => {
     return <div>加载中...</div>;
   }
 
-  return user ? children : <Navigate to="/login" />;
+  return user ? children : <Navigate to="/" />;
 };
 
 const AdminRoute = ({ children }) => {
@@ -114,11 +125,12 @@ function App() {
       <Router>
         <SeoManager />
         <Routes>
+          <Route path="/" element={<PublicRoute />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           
           <Route
-            path="/"
+            path="/dashboard"
             element={
               <PrivateRoute>
                 <Layout />

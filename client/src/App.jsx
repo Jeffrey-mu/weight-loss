@@ -140,14 +140,17 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path="diet" element={<Diet />} />
             <Route path="exercise" element={<Exercise />} />
-            <Route
-              path="admin"
-              element={
-                <AdminRoute>
-                  <Admin />
-                </AdminRoute>
-              }
-            />
+          </Route>
+          
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <Layout />
+              </AdminRoute>
+            }
+          >
+             <Route index element={<Admin />} />
           </Route>
         </Routes>
       </Router>
